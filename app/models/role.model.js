@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) =>{
         },
         status: {
             type: Sequelize.STRING(30),
-            unique: true,
+            unique: false,
             allowNull: false,
         }
     })
