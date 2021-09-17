@@ -1,7 +1,7 @@
 const db =require('../models')
 const User = db.user;
 
-exports.getAllUser = (re, res)=>{
+exports.getAllUser = (req, res)=>{
     User.findAll()
     .then(data =>{
         if (data.length != 0) {
@@ -17,18 +17,83 @@ exports.getAllUser = (re, res)=>{
     });
     }
 
-exports.getSingleUser = (re, res)=>{
-    res.status(200).send(' get Single User  Success')
-}
-exports.createUser = (re, res)=>{
-    res.status(200).send('Create user Success');
+exports.getSingleUser = (req, res)=>{
+    const id = req.params.id;
+
+    User.findByPk(id)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+};
+   
+exports.createUser = async (req, res)=>{
+
+    const user = {
+        username: req.body.username,
+        password: req.body.password,
+       
+        
+    }
+    await User.create(user)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+
+        // res.status(200).send(' Create  Success')
     
 }
 
-exports.updateUser = (re, res)=>{
-    res.status(200).send(' Update  Success')
+exports.updateUser = async (req, res)=>{
+    const user = {
+        username: req.body.username,
+        password: req.body.password,
+        
+    }
+    await User.update(
+        user, {
+        where: { id: req.body.id, }})
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+    // res.status(200).send(' Update  Success')
 }
 
-exports.deleteUser = (re, res)=>{
+exports.deleteUser = (req, res)=>{
     res.status(200).send('Delete  Success')
 }

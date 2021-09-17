@@ -1,7 +1,7 @@
 const db =require('../models')
 const Role = db.role;
 
-exports.getAllRole = (re, res)=>{
+exports.getAllRole = (req, res)=>{
     Role.findAll()
     .then(data =>{
         if (data.length != 0) {
@@ -17,18 +17,37 @@ exports.getAllRole = (re, res)=>{
     });
     }
 
-exports.getSingleRole = (re, res)=>{
-    res.status(200).send(' get Single Role  Success')
+exports.getSingleRole = (req, res)=>{
+
+    const id = req.params.id;
+
+    Role.findByPk(id)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+    // res.status(200).send(' get Single Role  Success')
 }
-exports.createRole = (re, res)=>{
+exports.createRole = (req, res)=>{
     res.status(200).send('Create  Success');
     
 }
 
-exports.updateRole = (re, res)=>{
+exports.updateRole = (req, res)=>{
     res.status(200).send(' Update  Success')
 }
 
-exports.deleteRole = (re, res)=>{
+exports.deleteRole = (req, res)=>{
     res.status(200).send('Delete  Success')
 }
