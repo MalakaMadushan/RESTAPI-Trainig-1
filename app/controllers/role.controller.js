@@ -39,13 +39,61 @@ exports.getSingleRole = (req, res)=>{
         });
     // res.status(200).send(' get Single Role  Success')
 }
-exports.createRole = (req, res)=>{
-    res.status(200).send('Create  Success');
+exports.createRole = async (req, res)=>{
+
+    const role = {
+        role_name: req.body.role_name,
+        status: req.body.status,
+       
+        
+    }
+    await Role.create(role)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+    // res.status(200).send('Create  Success');
     
 }
 
-exports.updateRole = (req, res)=>{
-    res.status(200).send(' Update  Success')
+exports.updateRole = async (req, res)=>{
+
+    const role = {
+        role_name: req.body.role_name,
+        status: req.body.status,
+        
+    }
+    await Role.update(
+        role, {
+        where: { id: req.body.id, }})
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+
+    // res.status(200).send(' Update  Success')
 }
 
 exports.deleteRole = (req, res)=>{

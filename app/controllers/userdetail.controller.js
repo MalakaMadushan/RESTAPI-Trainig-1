@@ -38,13 +38,70 @@ exports.getSingleUserDetail = (req, res)=>{
         });
     // res.status(200).send(' get Single UserDetail  Success')
 }
-exports.createUserDetail = (req, res)=>{
-    res.status(200).send('Create  Success');
+exports.createUserDetail = async (req, res)=>{
+
+    const userdetail = {
+        name_en: req.body.name_en,
+        name_si: req.body.name_si,
+        name_ta: req.body.name_ta,
+        dob: req.body.dob,
+        salary: req.body.salary,
+        special_req: req.body.special_req,
+
+    
+    }
+    await UserDetail.create(userdetail)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+
+    // res.status(200).send('Create  Success');
     
 }
 
-exports.updateUserDetail = (req, res)=>{
-    res.status(200).send(' Update  Success')
+exports.updateUserDetail = async (req, res)=>{
+
+    const userdetail = {
+        name_en: req.body.name_en,
+        name_si: req.body.name_si,
+        name_ta: req.body.name_ta,
+        dob: req.body.dob,
+        salary: req.body.salary,
+        special_req: req.body.special_req,
+
+    }
+
+    await UserDetail.update(
+        userdetail, {
+        where: { id: req.body.id, }})
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+    // res.status(200).send(' Update  Success')
 }
 
 exports.deleteUserDetail = (req, res)=>{

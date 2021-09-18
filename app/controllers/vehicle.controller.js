@@ -38,13 +38,60 @@ exports.getSingleVehicle = (req, res)=>{
         });
     // res.status(200).send(' get Single Vehicle  Success')
 }
-exports.createVehicle = (req, res)=>{
-    res.status(200).send(' Vehicle Create  Success');
+exports.createVehicle = async (req, res)=>{
+
+    const vehicle = {
+        vehi_type: req.body.vehi_type,
+        status: req.body.status,
+        // userId: req.body.userId,
+         
+    }
+    await Vehicle.create(vehicle)
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+
+    // res.status(200).send(' Vehicle Create  Success');
     
 }
 
-exports.updateVehicle = (req, res)=>{
-    res.status(200).send('Vehicle Update  Success')
+exports.updateVehicle = async (req, res)=>{
+    const vehicle = {
+        vehi_type: req.body.vehi_type,
+        status: req.body.status,
+         
+    }
+    await Vehicle.update(
+        vehicle, {
+        where: { id: req.body.id, }})
+        .then(data => {
+            if (data.length != 0) {
+                res.status(200).send(data);
+            } else {
+                res.status(404);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send(
+                {
+                    message: err.message || 'Not Found'
+                }
+            );
+        });
+    // res.status(200).send('Vehicle Update  Success')
 }
 
 exports.deleteVehicle = (req, res)=>{
