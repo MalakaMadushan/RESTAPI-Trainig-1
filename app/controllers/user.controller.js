@@ -1,5 +1,7 @@
 const db =require('../models')
 const User = db.user;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 exports.getAllUser = (req, res)=>{
     User.findAll()
@@ -40,9 +42,21 @@ exports.getSingleUser = (req, res)=>{
    
 exports.createUser = async (req, res)=>{
 
+    if (!req.body.username || !req.body.password) {
+        res.status(404)
+            .send({
+                status: false,
+                message: " Username and Password can't be empty."
+            });
+        return;
+    }
+
+    const password = req.body.password;
+    const encryptedPassword = await bcrypt.hash(password, saltRounds)
+
     const user = {
         username: req.body.username,
-        password: req.body.password,
+        password: encryptedPassword,
        
         
     }

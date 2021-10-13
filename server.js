@@ -6,6 +6,8 @@ const userRoute = require('./app/routes/user.route');
 const roleRoute = require('./app/routes/role.route');
 const userdetailRoute = require('./app/routes/userdetail.route');
 const vehicleRoute = require('./app/routes/vehicle.route');
+const authRoute = require('./app/routes/auth.route');
+const {verifyToken} = require('./app/middleware/auth.middleware');
 
 const app = express();
 
@@ -25,7 +27,9 @@ app.get("/",(req,res)=>{
 app.use('/user', userRoute);
 app.use('/role', roleRoute);
 app.use('/userdetail', userdetailRoute);
-app.use('/vehicle', vehicleRoute);
+app.use('/vehicle', verifyToken, vehicleRoute);
+app.use('/auth', authRoute);
+
 const PORT=3003;
 
 app.listen(PORT,()=>{
